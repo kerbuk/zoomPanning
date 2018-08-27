@@ -1,0 +1,78 @@
+<html>
+<head>
+	<style>
+		* {
+		    padding: 0;
+		    margin : 0;
+		}
+		li {
+		    list-style-type : none;
+		    float : left;
+		    width:50%;   
+		}
+		
+	</style>
+	<link rel="stylesheet" href="css/zoom_panning.css" />
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script>
+		$(document).ready(function(){
+			
+			$('.zoom-trigger').click(function(e) {
+				var _this = this;
+				if($(this).hasClass('zoomed')){
+					$(this).removeClass('zoomed');
+					$(this).find('div.zoomPanning').remove();
+				}else{
+					var orginSrc = $(this).find('img').attr('src');
+					$(this).append("<div class='zoomPanning'><img src="+orginSrc+"></div>");
+			        $(this).addClass("zoomed");	
+			        
+		        	var position = currentPosition($(this).find('div.zoomPanning'),e);
+					$(this).find('div.zoomPanning img').css('top', position.y + "px");
+					$(this).find('div.zoomPanning img').css('left', position.x + "px");	
+			        
+				}
+		    });
+			
+		    $(document).on('mousemove','.zoomed div.zoomPanning',function(e){
+		    	var $targetDiv = $(this).find('img');
+		        var position = currentPosition($(this),e);
+		        $targetDiv.css('top', position.y + "px");
+		        $targetDiv.css('left', position.x + "px");
+		    });
+		    
+		});
+		
+		function currentPosition($this,e){
+			
+			var $targetDiv = $this.find('img');
+		    var h = $targetDiv.height();
+		    var w = $targetDiv.width();
+		    
+		    var vptHeight = $this.height();
+		    var vptWidth = $this.width();
+		    var offset = $this.offset();
+		    
+		    var y = -((h - vptHeight)/vptHeight) * (e.pageY - offset.top);
+		    var x = -((w - vptWidth)/vptWidth) * (e.pageX - offset.left);
+		    
+		    return {
+		    	x : x,
+		    	y : y
+		    }
+			
+		}
+	
+	</script>
+</head>
+<body>
+	<ul style="width:200px">
+		<li class="zoom-trigger">
+			<img src="http://2.bp.blogspot.com/-IiPk89gEOiw/T38x7xpKpOI/AAAAAAAACeo/R9LeABDtxEg/s400/Granny+purse+with+Flowers.jpg" style="width:100%">			
+		</li>
+		<li class="zoom-trigger">
+			<img src="http://us.123rf.com/400wm/400/400/teddy2007b/teddy2007b0903/teddy2007b090300008/4539531-cup-and-bouquet-of-flowers-decorative-floral-background-for-banner-vector.jpg" style="width:100%">
+		</li>
+	</ul>
+</body>
+</html>

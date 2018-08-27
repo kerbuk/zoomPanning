@@ -15,36 +15,40 @@
 	<link rel="stylesheet" href="css/zoom_panning.css" />
 	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
 	<script>
-		$(document).ready(function(){
-			
-			$('.zoom-trigger').click(function(e) {
-				var _this = this;
-				if($(this).hasClass('zoomed')){
-					$(this).removeClass('zoomed');
-					$(this).find('div.zoomPanning').remove();
-				}else{
-					var orginSrc = $(this).find('img').attr('src');
-					$(this).append("<div class='zoomPanning'><img src="+orginSrc+"></div>");
-			        $(this).addClass("zoomed");	
-			        
-		        	var position = currentPosition($(this).find('div.zoomPanning'),e);
-					$(this).find('div.zoomPanning img').css('top', position.y + "px");
-					$(this).find('div.zoomPanning img').css('left', position.x + "px");	
-			        
-				}
-		    });
-			
-		    $(document).on('mousemove','.zoomed div.zoomPanning',function(e){
-		    	var $targetDiv = $(this).find('img');
-		        var position = currentPosition($(this),e);
-		        $targetDiv.css('top', position.y + "px");
-		        $targetDiv.css('left', position.x + "px");
-		    });
-		    
-		});
+	
+		$(document).ready(initZoom);
 		
+		function initZoom(){
+			$('.zoom-trigger').on('click',makeMovePalet);
+		    $(document).on('mousemove','div.zoomPanning',moveMouse);
+		}
+		
+		//원본이미지를 올릴 div를 생성
+		function makeMovePalet(e){
+			if($(this).hasClass('zoomed')){
+				$(this).removeClass('zoomed');
+				$(this).find('div.zoomPanning').remove();
+			}else{
+				var orginSrc = $(this).find('img').attr('src');
+				$(this).append("<div class='zoomPanning'><img src="+orginSrc+"></div>");
+		        $(this).addClass("zoomed");	
+		        
+	        	var position = currentPosition($(this).find('div.zoomPanning'),e);
+				$(this).find('div.zoomPanning img').css('top', position.y + "px");
+				$(this).find('div.zoomPanning img').css('left', position.x + "px");	
+			}
+		}
+		
+		//이미지 위에서 마우스 이동
+		function moveMouse(e){
+			var $targetDiv = $(this).find('img');
+	        var position = currentPosition($(this),e);
+	        $targetDiv.css('top', position.y + "px");
+	        $targetDiv.css('left', position.x + "px");
+		}
+		
+		//마우스의 위치 반환 position absolute img기준으로
 		function currentPosition($this,e){
-			
 			var $targetDiv = $this.find('img');
 		    var h = $targetDiv.height();
 		    var w = $targetDiv.width();
@@ -53,6 +57,7 @@
 		    var vptWidth = $this.width();
 		    var offset = $this.offset();
 		    
+		    //e.pageY 에서 offset.top 을 빼줘야 여러 이미지에서 panning이 가능하다. e.pageX도 마친가지임.
 		    var y = -((h - vptHeight)/vptHeight) * (e.pageY - offset.top);
 		    var x = -((w - vptWidth)/vptWidth) * (e.pageX - offset.left);
 		    
@@ -60,7 +65,6 @@
 		    	x : x,
 		    	y : y
 		    }
-			
 		}
 	
 	</script>

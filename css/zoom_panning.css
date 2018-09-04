@@ -1,9 +1,9 @@
 div.zoomPanning img {
 	top : 0;
 	left : 0;
-	position : absolute;
+	position : absolute; 
 }
-		
+
 .zoom-trigger {
 	position:relative;
     overflow:hidden;
@@ -16,10 +16,10 @@ div.zoomPanning img {
 .zoomed div.zoomPanning {
 	position : absolute;
     left : 0;
-    top : 0;	    
+    top : 0;
     width:100%;
     height:100%;
-    opacity : 1;    
+    opacity : 1;
     overflow : hidden;
 	display:block;
 	cursor: url(../img/zoom-out-1.svg),auto;
